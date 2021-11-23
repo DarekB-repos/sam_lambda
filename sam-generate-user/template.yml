@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  debug-function
+
+
+Globals:
+  Function:
+    Timeout: 15
+
+
+Resources:
+  Foo:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: random-user.lambda_handler
+      Runtime: python3.7
+      Environment:
+        Variables:
+          SSM_PARAM: /test/param/path
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+          - ssm:GetParameter
+          Resource: 'arn:aws:ssm:eu-west-1:827941427702:parameter/test/param/path'
